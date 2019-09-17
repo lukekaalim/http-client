@@ -22,12 +22,21 @@ jobs:
           key: modules-{{ checksum "package.json" }}
 
       - run: npm test
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
+          # taken to be the root directory of the workspace.
+          root: ~
+          # Must be relative path from root
+          paths:
+            - repo/node_modules
   deploy:
     working_directory: ~/repo
     docker:
       - image: circleci/node:12
     steps:
-      - checkout
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ~
       - restore_cache:
           keys:
             - modules-{{ checksum "package.json" }}
@@ -36,8 +45,7 @@ jobs:
       - run: npm ci install
       - run:
           name: Publish package
-          command: |
-            npm publish -access=public -_authToken=$NPM_PUBLISH_TOKEN
+          command: npm publish -access=public -_authToken=$NPM_PUBLISH_TOKEN
 workflows:
   version: 2
   commit:
