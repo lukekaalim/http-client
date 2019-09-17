@@ -1,6 +1,6 @@
 {
   "name": "@lukekaalim/http-client",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Simple HTTP REST Client abstraction over some common HTTP implementations on javascript platforms",
   "main": "dist/http-client.cjs.js",
   "module": "dist/http-client.esm.js",
