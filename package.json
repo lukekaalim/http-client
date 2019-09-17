@@ -5,7 +5,10 @@
   "main": "dist/http-client.cjs.js",
   "module": "dist/http-client.esm.js",
   "scripts": {
-    "test": "node test"
+    "preversion": "npm test",
+    "postversion": "git push --follow-tags",
+    "test": "node -r esm test",
+    "prepublishOnly": "rollup -c"
   },
   "author": "luke kaalim (luke@kaal.im)",
   "license": "MIT",
