@@ -75,7 +75,7 @@ const expectChromeFunctionality = expect(async () => {
       return page.evaluate(async (port) => {
         const { createHTTPClientFromFetch } = window['LK_HTTP_CLIENT'];
         // Use the page's window.fetch and window.headers
-        const client = createHTTPClientFromFetch(window.fetch, window.Headers);
+        const client = createHTTPClientFromFetch(fetch, Headers);
         return client.request(`http://localhost:${port}`);
       }, server.address().port);
     });
