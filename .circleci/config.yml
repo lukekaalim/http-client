@@ -25,10 +25,10 @@ jobs:
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
           # taken to be the root directory of the workspace.
-          root: ~
+          root: .
           # Must be relative path from root
           paths:
-            - repo/node_modules
+            - node_modules
   deploy:
     working_directory: ~/repo
     docker:
@@ -36,7 +36,7 @@ jobs:
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: ~
+          at: .
       - restore_cache:
           keys:
             - modules-{{ checksum "package.json" }}
