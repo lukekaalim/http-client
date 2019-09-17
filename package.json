@@ -1,5 +1,5 @@
 {
-  "name": "http-client",
+  "name": "@lukekaalim/http-client",
   "version": "1.0.0",
   "description": "Simple HTTP REST Client abstraction over some common HTTP implementations on javascript platforms",
   "main": "dist/http-client.cjs.js",
