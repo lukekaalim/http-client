@@ -18,8 +18,12 @@
     "node-fetch": "^2.6.0",
     "puppeteer": "^1.19.0",
     "rollup": "^1.20.2",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-flow-entry": "^0.3.1",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.1.1"
+  },
+  "dependencies": {
+    "@lukekaalim/result": "^1.1.1"
   }
 }

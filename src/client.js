@@ -1,6 +1,6 @@
 // @flow strict
 /*::
-import type { Result } from './result';
+import type { Result } from '@lukekaalim/result';
 
 export type HTTPHeaders = Array<{ name: string, value: string }>;
 export type HTTPMethod =

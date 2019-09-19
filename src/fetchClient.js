@@ -2,7 +2,7 @@
 /*::
 import type { HTTPClient } from './client';
 */
-import { succeed, fail } from './result';
+import { succeed, fail } from '@lukekaalim/result';
 
 const tuplesToObject = (list) => list.reduce((acc, [name, val]) => ({
   ...acc,

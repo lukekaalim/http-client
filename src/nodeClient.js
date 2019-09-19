@@ -6,7 +6,7 @@ import typeof { request as NodeHTTPSRequestFunc } from 'https';
 import typeof { request as NodeHTTPRequestFunc } from 'http';
 import type { HTTPClient } from './client';
 */
-import { succeed, fail } from './result';
+import { succeed, fail } from '@lukekaalim/result';
 
 // We need a couple of utilities to handle node
 const toTuples = (list) => {

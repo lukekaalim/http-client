@@ -1,6 +1,7 @@
 import flowEntry  from 'rollup-plugin-flow-entry';
 import { terser } from 'rollup-plugin-terser';
 import resolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
 
 const config = {
   input: 'src/index.js',
@@ -22,7 +23,7 @@ const config = {
       sourcemap: true,
     },
   ],
-  plugins: [flowEntry(), terser(), resolve()],
+  plugins: [flowEntry(), terser(), resolve(), commonjs()],
 };
 
 export default config;
