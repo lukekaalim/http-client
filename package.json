@@ -13,7 +13,6 @@
     "example": "example",
     "test": "test"
   },
-  "dependencies": {},
   "scripts": {
     "postversion": "git push origin --follow-tags",
     "test": "node test"
