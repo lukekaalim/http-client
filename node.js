@@ -52,10 +52,12 @@ const createNodeClient = (nodeRequest/*: NodeHTTPRequestFunction*/)/*: HTTPClien
 
     const headers = (Object.fromEntries(request.headers)/*: any*/);
 
+    const path = url.searchParams
+
     const clientRequest = nodeRequest({
       method: request.method,
       headers: headers,
-      path: url.pathname,
+      path: url.pathname + url.search,
       host: url.hostname,
       port: Number.parseInt(url.port, 10),
     });
