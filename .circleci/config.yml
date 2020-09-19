@@ -1,8 +1,6 @@
 # Javascript Node CircleCI 2.0 configuration file
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
-version: 2.1
-orbs:
-  puppeteer: threetreeslight/puppeteer@0.1.2
+version: 2
 jobs:
   test:
     working_directory: ~/repo
@@ -10,49 +8,41 @@ jobs:
       - image: circleci/node:12
     steps:
       - checkout
-      - puppeteer/install
       - restore_cache:
           keys:
             - modules-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - modules-
 
-      - run: npm ci install
+      - run: npm i
 
       - save_cache:
           paths:
             - node_modules
           key: modules-{{ checksum "package.json" }}
 
-      - run: npm test
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
-          # taken to be the root directory of the workspace.
-          root: ..
-          # Must be relative path from root
-          paths:
-            - repo
+      - run: node test
   deploy:
     working_directory: ~/repo
     docker:
       - image: circleci/node:12
     steps:
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: ..
-      - run: npm ci install
+      - checkout
       - run:
           name: Publish package
-          command: npm publish -access=public -_authToken=$NPM_PUBLISH_TOKEN
+          command: |
+            npm publish --access public -_authToken=$NPM_PUBLISH_TOKEN
 workflows:
   version: 2
   commit:
     jobs:
       - test:
-          filters:  # required since `deploy` has tag filters AND requires `build`
+          filters:  # required since `deploy` has tag filters AND requires `test`
             tags:
               only: /.*/
       - deploy:
+          context:
+            - NPM
           requires:
             - test
           filters:
