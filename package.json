@@ -15,6 +15,7 @@
   },
   "dependencies": {},
   "scripts": {
+    "postversion": "git push origin --follow-tags",
     "test": "node test"
   },
   "repository": {
