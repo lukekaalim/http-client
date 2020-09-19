@@ -2,28 +2,27 @@
   "name": "@lukekaalim/http-client",
   "version": "1.2.0",
   "description": "Simple HTTP REST Client abstraction over some common HTTP implementations on javascript platforms",
-  "main": "dist/http-client.cjs.js",
-  "module": "dist/http-client.esm.js",
-  "scripts": {
-    "prepare": "rollup -c",
-    "preversion": "npm test",
-    "postversion": "git push --follow-tags",
-    "test": "node -r esm test"
-  },
+  "main": "main.js",
   "author": "luke kaalim (luke@kaal.im)",
   "license": "MIT",
   "devDependencies": {
-    "@lukekaalim/test": "^4.6.0",
-    "esm": "^3.2.25",
-    "node-fetch": "^2.6.0",
-    "puppeteer": "^1.19.0",
-    "rollup": "^1.20.2",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-flow-entry": "^0.3.1",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^5.1.1"
+    "@lukekaalim/server": "^5.1.0",
+    "@lukekaalim/test": "^4.6.0"
   },
-  "dependencies": {
-    "@lukekaalim/result": "^1.1.1"
-  }
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "dependencies": {},
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukekaalim/http-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lukekaalim/http-client/issues"
+  },
+  "homepage": "https://github.com/lukekaalim/http-client#readme"
 }
