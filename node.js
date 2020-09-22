@@ -52,8 +52,6 @@ const createNodeClient = (nodeRequest/*: NodeHTTPRequestFunction*/)/*: HTTPClien
 
     const headers = (Object.fromEntries(request.headers)/*: any*/);
 
-    const path = url.searchParams
-
     const clientRequest = nodeRequest({
       method: request.method,
       headers: headers,
