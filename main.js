@@ -6,7 +6,7 @@ type HTTPRequest = {
   url: string | URL,
   headers: [string, string][],
   method: HTTPMethod,
-  body?: string,
+  body?: string | Uint8Array,
 };
 
 type HTTPResponse = {

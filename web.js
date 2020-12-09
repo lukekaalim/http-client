@@ -6,12 +6,22 @@
 /*::
 type FetchLike = (
   input: URL | string,
-  options: $ReadOnly<{
-    headers: [string, string][],
-    method: string,
-    body?: string,
+  options: {
+    body?: ?BodyInit,
+    cache?: CacheType,
+    credentials?: CredentialsType,
+    headers?: HeadersInit,
+    integrity?: string,
+    keepalive?: boolean,
+    method?: string,
+    mode?: ModeType,
+    redirect?: RedirectType,
+    referrer?: string,
+    referrerPolicy?: ReferrerPolicyType,
+    signal?: ?AbortSignal,
+    window?: any,
     ...
-  }>
+  }
 ) => Promise<$ReadOnly<{
   status: number,
   headers: Iterable<[string, string]>,

@@ -6,7 +6,7 @@
   "author": "luke kaalim (luke@kaal.im)",
   "license": "MIT",
   "devDependencies": {
-    "@lukekaalim/server": "^5.1.0",
+    "@lukekaalim/server": "^7.1.1",
     "@lukekaalim/test": "^4.6.0",
     "node-fetch": "^2.6.1"
   },

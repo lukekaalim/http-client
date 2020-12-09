@@ -1,5 +1,5 @@
 // @flow strict
-/*:: import type { Readable } from 'stream'; */
+/*:: import type { Readable, Writable } from 'stream'; */
 /*:: import type { HTTPClient } from './main'; */
 /*:: import type { HTTPStatus } from './http'; */
 /*::
@@ -30,9 +30,10 @@ type NodeHTTPResponse = Readable & {
   headers: Object,
   statusCode: number,
 };
-type NodeHTTPClientRequest = $ReadOnly<{
+type NodeHTTPClientRequest = Writable & $ReadOnly<{
  on: (eventName: string, eventHandler: Function) => NodeHTTPClientRequest,
  end: () => NodeHTTPClientRequest,
+ write: (chunk: string | Buffer, callback?: (error?: Error) => void) => boolean,
  ...,
 }>;
 type NodeHTTPRequestFunction = (options: NodeHTTPRequestParams) => NodeHTTPClientRequest;
@@ -74,6 +75,9 @@ const createNodeClient = (nodeRequest/*: NodeHTTPRequestFunction*/)/*: HTTPClien
         }
       });
       clientRequest.on('error', reject);
+
+      if (request.body)
+        clientRequest.write(request.body);
 
       clientRequest.end();
     });
