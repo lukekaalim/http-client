@@ -16,7 +16,7 @@
   },
   "scripts": {
     "postversion": "git push origin --follow-tags",
-    "test": "node test"
+    "test": "node entry.test"
   },
   "repository": {
     "type": "git",
