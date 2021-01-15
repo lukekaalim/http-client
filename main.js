@@ -23,6 +23,8 @@ export type {
   HTTPClient,
   HTTPRequest,
   HTTPResponse,
+  HTTPMethod,
+  HTTPStatus,
 };
 */
 
