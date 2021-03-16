@@ -31,4 +31,5 @@ export type {
 module.exports = {
   ...require('./node'),
   ...require('./web'),
+  ...require('./endpoint'),
 };

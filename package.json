@@ -6,7 +6,7 @@
   "author": "luke kaalim (luke@kaal.im)",
   "license": "MIT",
   "devDependencies": {
-    "@lukekaalim/server": "^7.1.1",
+    "@lukekaalim/server": "^9.0.0",
     "@lukekaalim/test": "^4.6.0",
     "node-fetch": "^2.6.1"
   },
@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/lukekaalim/http-client/issues"
   },
-  "homepage": "https://github.com/lukekaalim/http-client#readme"
+  "homepage": "https://github.com/lukekaalim/http-client#readme",
+  "dependencies": {
+    "@lukekaalim/cast": "^1.0.0"
+  }
 }
