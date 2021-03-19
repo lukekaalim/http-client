@@ -12,8 +12,11 @@ type HTTPMethod =
 
 type HTTPStatus = number;
 
+type HTTPHeaders = { +[string]: ?string };
+
 export type {
   HTTPStatus,
   HTTPMethod,
+  HTTPHeaders,
 };
 */

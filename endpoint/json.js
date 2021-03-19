@@ -1,57 +1,67 @@
 // @flow strict
 /*:: import type { Cast, JSONValue } from '@lukekaalim/cast'; */
-/*:: import type { HTTPService, EndpointClient } from '../endpoint'; */
-/*:: import type { HTTPClient, HTTPResponse, HTTPMethod, HTTPStatus } from '../main'; */
-/*:: import type { Authorization } from './authorization'; */
-const { stringify } = require('@lukekaalim/cast');
-const { createAuthorizationHeader, createNoneAuthorization } = require('./authorization');
-const { getObjectEntries } = require('./object');
-const { getErrorFromResponse } = require('./errors');
-const { createRequestURL, createRequestHeaders } = require('./request');
+/*:: import type { Endpoint, GETEndpoint, POSTEndpoint, PUTEndpoint, DELETEEndpoint } from '@lukekaalim/api-models'; */
+/*:: import type { HTTPService, GETEndpointClient, POSTEndpointClient, PUTEndpointClient, DELETEEndpointClient } from '../endpoint'; */
+/*:: import type { HTTPClient } from '../main'; */
 
-/*::
-export type JSONEndpoint<Query: { +[string]: ?string }, RequestBody, ResponseBody> = {
-  toResponseBody: JSONValue => ResponseBody,
-  method: HTTPMethod,
-  path: string,
-};
-*/
+const { createRequest, createResponse } = require('./request');
 
-const createJSONEndpointClient = /*:: <
-  Query: { +[string]: string },
-  RequestBody: JSONValue,
-  ResponseBody: JSONValue
->*/({
-  endpoint,
-  http,
-  service,
-  authorization = createNoneAuthorization(),
-}/*: {
-  endpoint: JSONEndpoint<Query, RequestBody, ResponseBody>,
-  http: HTTPClient,
-  service: HTTPService,
-  authorization?: Authorization,
-}*/)/*: EndpointClient<Query, RequestBody, ResponseBody>*/ => {
-  const call = async (requestBodyValue = null, query = null) => {
-    const requestURL = createRequestURL(endpoint.path, service.baseURL, query)
-    const requestBody = stringify(requestBodyValue);
-    const requestHeaders = createRequestHeaders(requestBody, authorization);
-
-    const request = {
-      url: requestURL,
-      headers: requestHeaders,
-      method: endpoint.method,
-      body: requestBody,
-    }
+const createGETClient = /*:: <ResponseBody: JSONValue, Query: ?{ +[string]: ?string }>*/(
+  endpoint/*: GETEndpoint<ResponseBody, Query>*/,
+  http/*: HTTPClient*/,
+  service/*: HTTPService*/,
+)/*: GETEndpointClient<Query, ResponseBody>*/ => {
+  const get = async (query, headers = {}) => {
+    const request = createRequest('POST', endpoint, service, query, null, headers);
     const response = await http.sendRequest(request);
-    const error = getErrorFromResponse(request, response);
-    if (error)
-      throw error;
-    return endpoint.toResponseBody(JSON.parse(response.body));
+    return createResponse(request, response, endpoint.toResponseBody);
   };
-  return { call };
+  return { get };
+};
+
+const createPOSTClient = /*:: <RequestBody: JSONValue, ResponseBody: JSONValue, Query: ?{ +[string]: ?string }>*/(
+  endpoint/*: POSTEndpoint<RequestBody, ResponseBody, Query>*/,
+  http/*: HTTPClient*/,
+  service/*: HTTPService*/,
+)/*: POSTEndpointClient<Query, RequestBody, ResponseBody>*/ => {
+  const post = async (query, body, headers = {}) => {
+    const request = createRequest('POST', endpoint, service, query, body, headers);
+    const response = await http.sendRequest(request);
+    return createResponse(request, response, endpoint.toResponseBody);
+  };
+  return { post };
+};
+
+
+const createPUTClient = /*:: <RequestBody: JSONValue, Query: ?{ +[string]: ?string }>*/(
+  endpoint/*: PUTEndpoint<RequestBody, Query>*/,
+  http/*: HTTPClient*/,
+  service/*: HTTPService*/,
+)/*: PUTEndpointClient<Query, RequestBody>*/ => {
+  const put = async (query, body, headers = {}) => {
+    const request = createRequest('PUT', endpoint, service, query, body, headers);
+    const response = await http.sendRequest(request);
+    return createResponse(request, response, () => null);
+  };
+  return { put };
+};
+
+const createDELETEClient = /*:: <RequestBody: JSONValue, ResponseBody: JSONValue, Query: ?{ +[string]: ?string }>*/(
+  endpoint/*: DELETEEndpoint<RequestBody, ResponseBody, Query>*/,
+  http/*: HTTPClient*/,
+  service/*: HTTPService*/,
+)/*: DELETEEndpointClient<Query, RequestBody, ResponseBody>*/ => {
+  const _delete = async (query, body, headers = {}) => {
+    const request = createRequest('PUT', endpoint, service, query, body, headers);
+    const response = await http.sendRequest(request);
+    return createResponse(request, response, endpoint.toResponseBody);
+  };
+  return { delete: _delete };
 };
 
 module.exports = {
-  createJSONEndpointClient,
+  createGETClient,
+  createPOSTClient,
+  createDELETEClient,
+  createPUTClient,
 }

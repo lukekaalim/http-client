@@ -1,13 +1,16 @@
 // @flow strict
 const { createServer, request } = require('http');
-const { createNodeClient, createJSONEndpointClient, createBasicAuthorization } = require('../../');
-const { router, createRoute, application, readJSONBody } = require('@lukekaalim/server');
+const { createNodeClient, json: { createGETClient }, createBasicAuthorization } = require('../../');
+const { router, createRoute, application, readJSONBody, getAuthorization } = require('@lukekaalim/server');
+const { createPOSTClient } = require('../../endpoint/json');
 
 const main = async () => {
   const listener = router([createRoute('POST', '/example', async (request) => 
     application.json(200, {
       my: 'response',
-      request: await readJSONBody(request.incoming, request.headers)
+      query: request.query,
+      auth: getAuthorization(request.headers),
+      echo: await readJSONBody(request.incoming, request.headers)
     })
   )]);
   const server = createServer(listener);
@@ -20,17 +23,28 @@ const main = async () => {
     const authorization = createBasicAuthorization('myUserName', 'mySecretPassword');
     const service = {
       baseURL: new URL(`http://${address}:${port}`),
+      authorization,
     };
-    const endpoint = {
+    const echoEndpoint = {
       method: 'POST',
       path: '/example',
       toResponseBody: (a) => a,
       toRequestBody: (a) => a,
       toQuery: (a) => a,
     };
-    const echoClient = createJSONEndpointClient({ endpoint, service, http, authorization });
+    const infoEndpoint = {
+      method: 'GET',
+      path: '/example',
+      toResponseBody: (a) => a,
+      toQuery: (a) => a,
+    }
+    const exampleClient = {
+      ...createPOSTClient(echoEndpoint, http, service),
+      ...createGETClient(infoEndpoint, http, service),
+    }
   
-    console.log(await echoClient.call({ my: 'request' }));
+    console.log(await exampleClient.get());
+    console.log(await exampleClient.post(null, { myRequest: 'Hello there!' }));
   } catch(error) {
     console.error(error);
   } finally {
