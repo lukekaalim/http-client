@@ -26,6 +26,7 @@ export type {
   HTTPMethod,
   HTTPStatus,
 };
+export type * from './endpoint';
 */
 
 module.exports = {
