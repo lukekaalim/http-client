@@ -9,6 +9,7 @@
 const { stringify, parse } = require('@lukekaalim/cast');
 const { createAuthorizationHeader, createNoneAuthorization } = require('./authorization');
 const { getErrorFromResponse } = require('./errors');
+const { encodeStringToArrayBuffer } = require('../encoding');
 
 const createRequestURL = (path/*: string*/, baseURL/*: URL*/, query/*: ?{ +[string]: ?string }*/)/*: URL*/ => {
   if (!query)
@@ -27,7 +28,7 @@ const createRequestURL = (path/*: string*/, baseURL/*: URL*/, query/*: ?{ +[stri
 const createRequestHeaders = (body/*: ?string*/, authorization/*: Authorization*/)/*: [string, string][]*/ => {
   return [
     body ? ['content-type', 'application/json'] : null,
-    body ? ['content-length', Buffer.from(body, 'utf8').byteLength.toString()] : null,
+    body ? ['content-length', encodeStringToArrayBuffer(body).byteLength.toString()] : null,
     createAuthorizationHeader(authorization),
     ['accept', 'application/json'],
   ].filter(Boolean);
