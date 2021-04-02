@@ -4,7 +4,7 @@
 /*:: import type { HTTPService, GETEndpointClient, POSTEndpointClient, PUTEndpointClient, DELETEEndpointClient } from '../endpoint'; */
 /*:: import type { HTTPClient } from '../main'; */
 
-const { createRequest, createResponse } = require('./request');
+const { createRequest, createResponse, createBodyRequest } = require('./request');
 
 const createGETClient = /*:: <ResponseBody: JSONValue, Query: ?{ +[string]: ?string }>*/(
   endpoint/*: GETEndpoint<ResponseBody, Query>*/,
@@ -12,7 +12,7 @@ const createGETClient = /*:: <ResponseBody: JSONValue, Query: ?{ +[string]: ?str
   service/*: HTTPService*/,
 )/*: GETEndpointClient<Query, ResponseBody>*/ => {
   const get = async (query, headers = {}) => {
-    const request = createRequest('GET', endpoint, service, query, null, headers);
+    const request = createRequest('GET', endpoint, service, query, headers);
     const response = await http.sendRequest(request);
     return createResponse(request, response, endpoint.toResponseBody);
   };
@@ -25,7 +25,7 @@ const createPOSTClient = /*:: <RequestBody: JSONValue, ResponseBody: JSONValue, 
   service/*: HTTPService*/,
 )/*: POSTEndpointClient<Query, RequestBody, ResponseBody>*/ => {
   const post = async (query, body, headers = {}) => {
-    const request = createRequest('POST', endpoint, service, query, body, headers);
+    const request = createBodyRequest('POST', endpoint, service, query, body, headers);
     const response = await http.sendRequest(request);
     return createResponse(request, response, endpoint.toResponseBody);
   };
@@ -39,7 +39,7 @@ const createPUTClient = /*:: <RequestBody: JSONValue, Query: ?{ +[string]: ?stri
   service/*: HTTPService*/,
 )/*: PUTEndpointClient<Query, RequestBody>*/ => {
   const put = async (query, body, headers = {}) => {
-    const request = createRequest('PUT', endpoint, service, query, body, headers);
+    const request = createBodyRequest('PUT', endpoint, service, query, body, headers);
     const response = await http.sendRequest(request);
     return createResponse(request, response, () => null);
   };
@@ -52,7 +52,7 @@ const createDELETEClient = /*:: <RequestBody: JSONValue, ResponseBody: JSONValue
   service/*: HTTPService*/,
 )/*: DELETEEndpointClient<Query, RequestBody, ResponseBody>*/ => {
   const _delete = async (query, body, headers = {}) => {
-    const request = createRequest('PUT', endpoint, service, query, body, headers);
+    const request = createBodyRequest('DELETE', endpoint, service, query, body, headers);
     const response = await http.sendRequest(request);
     return createResponse(request, response, endpoint.toResponseBody);
   };

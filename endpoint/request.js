@@ -39,6 +39,24 @@ const createRequest = /*:: <Q: ?{ +[string]: ?string }>*/(
   endpoint/*: { ...Endpoint<Q> }*/,
   service/*: HTTPService*/,
   query/*: Q*/,
+  headers/*: HTTPHeaders*/
+)/*: HTTPRequest*/ => {
+  const requestURL = createRequestURL(endpoint.path, service.baseURL, query);
+  const requestHeaders = createRequestHeaders(null, service.authorization || createNoneAuthorization());
+
+  const request = {
+    url: requestURL,
+    headers: requestHeaders,
+    method: method,
+  }
+  return request;
+};
+
+const createBodyRequest = /*:: <Q: ?{ +[string]: ?string }>*/(
+  method/*: HTTPMethod*/,
+  endpoint/*: { ...Endpoint<Q> }*/,
+  service/*: HTTPService*/,
+  query/*: Q*/,
   body/*: JSONValue*/,
   headers/*: HTTPHeaders*/
 )/*: HTTPRequest*/ => {
@@ -72,6 +90,7 @@ const createResponse = /*::<R>*/(
 
 module.exports = {
   createRequest,
+  createBodyRequest,
   createResponse,
   createRequestURL,
   createRequestHeaders,
