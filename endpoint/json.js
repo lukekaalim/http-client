@@ -12,7 +12,7 @@ const createGETClient = /*:: <ResponseBody: JSONValue, Query: ?{ +[string]: ?str
   service/*: HTTPService*/,
 )/*: GETEndpointClient<Query, ResponseBody>*/ => {
   const get = async (query, headers = {}) => {
-    const request = createRequest('POST', endpoint, service, query, null, headers);
+    const request = createRequest('GET', endpoint, service, query, null, headers);
     const response = await http.sendRequest(request);
     return createResponse(request, response, endpoint.toResponseBody);
   };
