@@ -25,8 +25,11 @@ const createRequestURL = (path/*: string*/, baseURL/*: URL*/, query/*: ?{ +[stri
   return url;
 };
 
-const createRequestHeaders = (body/*: ?string*/, authorization/*: Authorization*/)/*: [string, string][]*/ => {
+const createRequestHeaders = (body/*: ?string*/, authorization/*: Authorization*/, clientHeaders/*: HTTPHeaders*/ = {})/*: [string, string][]*/ => {
   return [
+    ...Object.entries(clientHeaders)
+      .map(([name, value]) => value && typeof value === 'string' ? [name, value] : null)
+      .filter(Boolean),
     body ? ['content-type', 'application/json'] : null,
     body ? ['content-length', encodeStringToArrayBuffer(body).byteLength.toString()] : null,
     createAuthorizationHeader(authorization),
@@ -42,7 +45,7 @@ const createRequest = /*:: <Q: ?{ +[string]: ?string }>*/(
   headers/*: HTTPHeaders*/
 )/*: HTTPRequest*/ => {
   const requestURL = createRequestURL(endpoint.path, service.baseURL, query);
-  const requestHeaders = createRequestHeaders(null, service.authorization || createNoneAuthorization());
+  const requestHeaders = createRequestHeaders(null, service.authorization || createNoneAuthorization(), headers);
 
   const request = {
     url: requestURL,
@@ -62,7 +65,7 @@ const createBodyRequest = /*:: <Q: ?{ +[string]: ?string }>*/(
 )/*: HTTPRequest*/ => {
   const requestBody = stringify(body);
   const requestURL = createRequestURL(endpoint.path, service.baseURL, query);
-  const requestHeaders = createRequestHeaders(requestBody, service.authorization || createNoneAuthorization());
+  const requestHeaders = createRequestHeaders(requestBody, service.authorization || createNoneAuthorization(), headers);
 
   const request = {
     url: requestURL,
