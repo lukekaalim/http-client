@@ -2,42 +2,8 @@
 /*:: import type { Readable, Writable } from 'stream'; */
 /*:: import type { HTTPClient } from './main'; */
 /*:: import type { HTTPStatus } from './http'; */
-/*::
-type NodeHTTPRequestOptions = {
-  auth?: string,
-  defaultPort?: number,
-  family?: number,
-  headers?: { [key: string] : mixed, ... },
-  host?: string,
-  hostname?: string,
-  localAddress?: string,
-  method?: string,
-  path?: string,
-  port?: number,
-  protocol?: string,
-  setHost?: boolean,
-  socketPath?: string,
-  timeout?: number,
-};
-
-type NodeHTTPRequestParams = {
-  ...NodeHTTPRequestOptions,
-  agent?: any,
-  createConnection?: any,
-  ...
-};
-type NodeHTTPResponse = Readable & {
-  headers: Object,
-  statusCode: number,
-};
-type NodeHTTPClientRequest = Writable & $ReadOnly<{
- on: (eventName: string, eventHandler: Function) => NodeHTTPClientRequest,
- end: () => NodeHTTPClientRequest,
- write: (chunk: string | Buffer, callback?: (error?: Error) => void) => boolean,
- ...,
-}>;
-type NodeHTTPRequestFunction = (options: NodeHTTPRequestParams) => NodeHTTPClientRequest;
-*/
+/*:: import typeof { request } from 'http'; */
+/*:: import type { IncomingMessage } from 'http'; */
 
 const readStream = async (stream/*: Readable*/) => {
   const chunks = [];
@@ -47,7 +13,7 @@ const readStream = async (stream/*: Readable*/) => {
   return chunks.join('');
 };
 
-const createNodeClient = (nodeRequest/*: NodeHTTPRequestFunction*/)/*: HTTPClient*/ => {
+const createNodeClient = (nodeRequest/*: request*/)/*: HTTPClient*/ => {
   const sendRequest = async (request) => {
     const url = request.url instanceof URL ? request.url : new URL(request.url);
 
@@ -61,7 +27,7 @@ const createNodeClient = (nodeRequest/*: NodeHTTPRequestFunction*/)/*: HTTPClien
       port: Number.parseInt(url.port, 10),
     });
     const response = await new Promise((resolve, reject) => {
-      clientRequest.on('response', async (response/*: NodeHTTPResponse*/) => {
+      clientRequest.on('response', async (response/*: IncomingMessage*/) => {
         try {
           response.on('error', reject);
           const body = await readStream(response);
