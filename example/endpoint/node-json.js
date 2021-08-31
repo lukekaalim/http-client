@@ -1,4 +1,5 @@
 // @flow strict
+const { inspect } = require('util');
 const { createServer, request } = require('http');
 const { createNodeClient, json: { createGETClient }, createBasicAuthorization } = require('../../');
 const { router, createRoute, application, readJSONBody, getAuthorization } = require('@lukekaalim/server');
@@ -8,7 +9,7 @@ const main = async () => {
   const listener = router([createRoute('POST', '/example', async (request) => 
     application.json(200, {
       my: 'response',
-      query: request.query,
+      query: [...request.query],
       auth: getAuthorization(request.headers),
       echo: await readJSONBody(request.incoming, request.headers)
     })
@@ -43,8 +44,10 @@ const main = async () => {
       ...createGETClient(infoEndpoint, http, service),
     }
   
-    console.log(await exampleClient.get());
-    console.log(await exampleClient.post(null, { myRequest: 'Hello there!' }));
+    console.log(inspect(await exampleClient.post(
+      { hello: 'there' },
+      { myRequest: 'Hello there!' }
+    ), { depth: null, colors: true }));
   } catch(error) {
     console.error(error);
   } finally {
